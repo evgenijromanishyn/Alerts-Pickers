@@ -175,6 +175,10 @@ final public class ContactsPickerViewController: UIViewController {
             /// Authorization granted by user for this app.
             DispatchQueue.main.async {
                 self.fetchContacts(completionHandler: completionHandler)
+                
+                if let parentVC = self.parentVC {
+                    parentVC.present(self, animated: true)
+                }
             }
 
         case .denied, .restricted:
