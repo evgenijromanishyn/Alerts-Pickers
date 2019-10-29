@@ -28,10 +28,11 @@ extension UIAlertController {
     
     public func addContactsPicker(title:String? = nil,
                                   showTitles:Bool = false,
+                                  parentVC: UIViewController? = nil,
                                   selection: @escaping ContactsPickerViewController.Selection) {
         let vc = ContactsPickerViewController(selection: selection)
         vc.showTitles = showTitles
-        
+        vc.parentVC = parentVC
         set(vc: vc)
     }
 }
@@ -60,6 +61,7 @@ final public class ContactsPickerViewController: UIViewController {
     
     fileprivate lazy var searchView: UIView = UIView()
     
+    var parentVC: UIViewController?
     var showTitles = false
     
     fileprivate lazy var searchController: UISearchController = {
@@ -185,7 +187,12 @@ final public class ContactsPickerViewController: UIViewController {
                 }
             }
             alert.addAction(title: "OK", style: .cancel)
-            alert.show()
+            
+            if let parentVC = parentVC {
+                parentVC.present(alert, animated: true)
+            } else {
+                alert.show()
+            }
         }
     }
     
