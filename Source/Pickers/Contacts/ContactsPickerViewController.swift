@@ -177,15 +177,17 @@ final public class ContactsPickerViewController: UIViewController {
 
         case .denied, .restricted:
             /// User has denied the current app to access the contacts.
-            let productName = Bundle.main.dlgpicker_appName
-            let alert = UIAlertController(title: "Permission denied", message: "\(productName) does not have access to contacts. Please, allow the application to access to your contacts.", preferredStyle: .alert)
-            alert.addAction(title: "Settings", style: .destructive) { action in
-                if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
-                    UIApplication.shared.open(settingsURL)
+            self.dismiss(animated: true) {
+                let productName = Bundle.main.dlgpicker_appName
+                let alert = UIAlertController(title: "Permission denied", message: "\(productName) does not have access to contacts. Please, allow the application to access to your contacts.", preferredStyle: .alert)
+                alert.addAction(title: "Settings", style: .destructive) { action in
+                    if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
+                        UIApplication.shared.open(settingsURL)
+                    }
                 }
+                alert.addAction(title: "OK", style: .cancel)
+                alert.show()
             }
-            alert.addAction(title: "OK", style: .cancel)
-            alert.show()
         }
     }
     
