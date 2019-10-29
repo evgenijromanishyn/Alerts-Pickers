@@ -25,6 +25,15 @@ extension UIAlertController {
         set(vc: vc)
         addAction(addContact)
     }
+    
+    public func addContactsPicker(title:String? = nil,
+                                  showTitles:Bool = false,
+                                  selection: @escaping ContactsPickerViewController.Selection) {
+        let vc = ContactsPickerViewController(selection: selection)
+        vc.showTitles = showTitles
+        
+        set(vc: vc)
+    }
 }
 
 final public class ContactsPickerViewController: UIViewController {
@@ -50,6 +59,8 @@ final public class ContactsPickerViewController: UIViewController {
     fileprivate var selectedContact: Contact?
     
     fileprivate lazy var searchView: UIView = UIView()
+    
+    var showTitles = false
     
     fileprivate lazy var searchController: UISearchController = {
         $0.searchResultsUpdater = self
@@ -302,6 +313,8 @@ extension ContactsPickerViewController: UITableViewDataSource {
     }
     
     public func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+        if showTitles == false {return nil}
+        
         if searchController.isActive { return nil }
         return sortedContactKeys
     }
