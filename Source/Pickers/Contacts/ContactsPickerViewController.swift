@@ -35,6 +35,7 @@ extension UIAlertController {
         vc.showTitles = showTitles
         vc.parentVC = parentVC
         vc.alertVC = alertVC
+        
         set(vc: vc)
     }
 }
@@ -143,6 +144,10 @@ final public class ContactsPickerViewController: UIViewController {
     
     override public func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        
+        if searchController.isActive {
+            return
+        }
         preferredContentSize.height = tableView.contentSize.height
         Log("preferredContentSize.height = \(preferredContentSize.height), tableView.contentSize.height = \(tableView.contentSize.height)")
     }
