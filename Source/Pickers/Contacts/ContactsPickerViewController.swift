@@ -26,8 +26,9 @@ extension UIAlertController {
         addAction(addContact)
     }
     
-    public func addContactsPicker(title:String? = nil,
-                                  showTitles:Bool = false,
+    public func addContactsPicker(title: String? = nil,
+                                  height: CGFloat? = nil,
+                                  showTitles: Bool = false,
                                   parentVC: UIViewController? = nil,
                                   alertVC: UIAlertController,
                                   selection: @escaping ContactsPickerViewController.Selection) {
@@ -36,7 +37,7 @@ extension UIAlertController {
         vc.parentVC = parentVC
         vc.alertVC = alertVC
         
-        set(vc: vc)
+        set(vc: vc, height: height)
     }
 }
 
