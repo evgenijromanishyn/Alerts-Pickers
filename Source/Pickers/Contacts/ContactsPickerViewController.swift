@@ -201,10 +201,12 @@ final public class ContactsPickerViewController: UIViewController {
             }
             alert.addAction(title: "OK", style: .cancel)
             
-            if let parentVC = parentVC {
-                parentVC.present(alert, animated: true)
-            } else {
-                alert.show()
+            DispatchQueue.main.async {
+                if let parentVC = self.parentVC {
+                    parentVC.present(alert, animated: true)
+                } else {
+                    alert.show()
+                }
             }
         }
     }
