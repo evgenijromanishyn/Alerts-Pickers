@@ -166,6 +166,7 @@ final public class ContactsPickerViewController: UIViewController {
             
             DispatchQueue.main.async {
                 self.tableView.reloadData()
+                self.preferredContentSize.height = self.tableView.contentSize.height
             }
         }
     }
@@ -212,6 +213,10 @@ final public class ContactsPickerViewController: UIViewController {
         }
     
     func fetchContacts(completionHandler: @escaping ([String: [CNContact]]) -> ()) {
+//        Contacts.fetchContactsOnBackgroundThread { [unowned self] result in
+//
+//        }
+        
         Contacts.fetchContactsGroupedByAlphabets { [unowned self] result in
             switch result {
                 
