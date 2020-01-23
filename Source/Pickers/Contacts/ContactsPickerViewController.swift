@@ -65,8 +65,8 @@ final public class ContactsPickerViewController: UIViewController {
     
     fileprivate lazy var searchView: UIView = UIView()
     
-    var parentVC: UIViewController?
-    var alertVC: UIAlertController?
+    public var parentVC: UIViewController?
+    public var alertVC: UIAlertController?
     var showTitles = false
     
     fileprivate lazy var searchController: UISearchController = {
@@ -178,7 +178,9 @@ final public class ContactsPickerViewController: UIViewController {
         case .notDetermined:
             /// This case means the user is prompted for the first time for allowing contacts
             Contacts.requestAccess { [unowned self] bool, error in
-                self.checkStatus(completionHandler: completionHandler)
+                if bool {
+                    self.checkStatus(completionHandler: completionHandler)
+                }
             }
             
         case .authorized:
@@ -190,27 +192,31 @@ final public class ContactsPickerViewController: UIViewController {
                     parentVC.present(alertVC, animated: true)
                 }
             }
-
+            
         case .denied, .restricted:
-                /// User has denied the current app to access the contacts.
-                DispatchQueue.main.async {
-                    let productName = Bundle.main.dlgpicker_appName
-                    let alert = UIAlertController(title: "Permission denied", message: "\(productName) does not have access to contacts. Please, allow the application to access to your contacts.", preferredStyle: .alert)
-                    alert.addAction(title: "Settings", style: .destructive) { action in
-                        if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
-                            UIApplication.shared.open(settingsURL)
-                        }
+            /// User has denied the current app to access the contacts.
+            DispatchQueue.main.async {
+                //let productName = Bundle.main.dlgpicker_appName
+                
+                let locTitle = NSLocalizedString("Permission denied", comment: "")
+                let actionTitle = NSLocalizedString("Settings", comment: "")
+                let locMessage = NSLocalizedString("App does not have access to contacts. Please, allow the application to access to your contacts.", comment: "")
+                let alert = UIAlertController(title: locTitle, message: locMessage, preferredStyle: .alert)
+                alert.addAction(title: actionTitle, style: .destructive) { action in
+                    if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
+                        UIApplication.shared.open(settingsURL)
                     }
-                    alert.addAction(title: "OK", style: .cancel)
-
-                    if let parentVC = self.parentVC {
-                        parentVC.present(alert, animated: true)
-                    } else {
-                        alert.show()
-                    }
+                }
+                alert.addAction(title: "OK", style: .cancel)
+                
+                if let parentVC = self.parentVC {
+                    parentVC.present(alert, animated: true)
+                } else {
+                    alert.show()
                 }
             }
         }
+    }
     
     func fetchContacts(completionHandler: @escaping ([String: [CNContact]]) -> ()) {
 //        Contacts.fetchContactsOnBackgroundThread { [unowned self] result in
